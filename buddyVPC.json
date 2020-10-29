@@ -125,6 +125,14 @@
                     "Ref": "vpcBuddy"
                 }
             }
+        },
+        
+        "rtPublic": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcID": {"Ref": "vpcBuddy"},
+                "Tags": [{"Key": "Name", "Volue": "Rt-Public-Buddy"} ]
+            }
         }
     }
 }
