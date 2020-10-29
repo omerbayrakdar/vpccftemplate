@@ -133,6 +133,16 @@
                 "VpcID": {"Ref": "vpcBuddy"},
                 "Tags": [{"Key": "Name", "Volue": "Rt-Public-Buddy"} ]
             }
+        },
+
+        "rtpublicroute": {
+            "Type": "AWS::EC2::Route",
+            "DependsOn": "igwattachmentvpcBuddy",
+            "Properties": {
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "RouteTableId": { "Ref": "rtPublic"},
+                "GatewayId": {"Ref": "igwvpcBuddy"}
+            }
         }
     }
 }
