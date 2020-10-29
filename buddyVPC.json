@@ -1,0 +1,130 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "This template is for VPC",
+    "Parameters":
+    {
+        "KeyName": 
+        {
+            "Description": "This key is used for ssh in to EC2 instance",
+            "Type": "AWS::EC2::KeyPair::KeyName"
+        },
+        "LatestAmiId": 
+        {
+            "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+            "Default": "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
+        }
+    },
+    "Resources": 
+    {
+        "vpcBuddy":
+        {
+            "Type": "AWS::EC2::VPC",
+            "Properties":
+            {
+                "Tags": 
+                [
+                    {
+                        "Key": "Name",
+                        "Value": "vpcBuddy"
+                    }
+                ],
+                "CidrBlock": "10.10.0.0/16",
+                "EnableDnsHostnames": true,
+                "EnableDnsSupport": true,
+                "InstanceTenancy": "Default"
+            }
+        },
+        "vpcBuddyPublicSubnetA1": 
+        {
+            "Type": "AWS::EC2::Subnet",
+            "Description": "This Public subnet is for vpc Buddy Subnet A1",
+            "Properties":
+            {
+                "Tags": 
+                [
+                    {
+                        "Key": "Name",
+                        "Value": "vpcBuddyPublicsubnet1"
+                    }
+                ],
+                "VpcId": 
+                {
+                    "Ref": "vpcBuddy"
+                },
+                "MapPublicIpOnLaunch": "true",
+                "AvailabilityZone": 
+                {
+                    "Fn::Select": 
+                    [
+                        "0",
+                        {
+                            "Fn::GetAZs": ""
+                        }
+                    ]
+                },
+                "CidrBlock": "10.10.1.0/24"
+            }
+        },
+        "vpcBuddyPrivateSubnetA1": 
+        {
+            "Type": "AWS::EC2::Subnet",
+            "Description": "This Private subnet is for vpc Buddy Subnet A1",
+            "Properties": 
+            {
+                "Tags": 
+                [
+                    {
+                        "Key": "Name",
+                        "Value": "vpcBuddyPrivatesubnet1"
+                    }
+                ],
+                "VpcId": 
+                {
+                    "Ref": "vpcBuddy"
+                },
+                "MapPublicIpOnLaunch": "false",
+                "AvailabilityZone":
+                {
+                    "Fn::Select": 
+                    [
+                        "0",
+                        {
+                            "Fn::GetAZs": ""
+                        }
+                    ]
+                },
+                "CidrBlock": "10.10.2.0/24"
+            }
+        },
+        "igwvpcBuddy": 
+        {
+            "Type": "AWS::EC2::InternetGateway",
+            "DependsOn": "vpcBuddy",
+            "Properties": 
+            {
+                "Tags": 
+                [
+                    {
+                        "Key": "Name",
+                        "Value": "igwvpcBuddy"
+                    }
+                ]
+            }
+        },
+        "igwattachmentvpcBuddy": 
+        {
+            "Type": "AWS::EC2::VPCGatewayAttachment",
+            "Properties": 
+            {
+                "InternetgatewayId": 
+                {
+                    "Ref": "igwvpcBuddy"
+                },
+                "VpcId": 
+                {
+                    "Ref": "vpcBuddy"
+                }
+            }
+        }
+    }
+}
