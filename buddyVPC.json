@@ -21,17 +21,11 @@
             "Type": "AWS::EC2::VPC",
             "Properties":
             {
-                "Tags": 
-                [
-                    {
-                        "Key": "Name",
-                        "Value": "vpcBuddy"
-                    }
-                ],
                 "CidrBlock": "10.10.0.0/16",
                 "EnableDnsHostnames": true,
                 "EnableDnsSupport": true,
-                "InstanceTenancy": "Default"
+                "InstanceTenancy": "default",
+                "Tags": [{"Key": "Name", "Value": "vpcBuddy"}]
             }
         },
         "vpcBuddyPublicSubnetA1": 
@@ -40,13 +34,7 @@
             "Description": "This Public subnet is for vpc Buddy Subnet A1",
             "Properties":
             {
-                "Tags": 
-                [
-                    {
-                        "Key": "Name",
-                        "Value": "vpcBuddyPublicsubnet1"
-                    }
-                ],
+                "Tags": [{"Key": "Name","Value": "vpcBuddyPublicsubnet1"}],
                 "VpcId": 
                 {
                     "Ref": "vpcBuddy"
@@ -102,13 +90,7 @@
             "DependsOn": "vpcBuddy",
             "Properties": 
             {
-                "Tags": 
-                [
-                    {
-                        "Key": "Name",
-                        "Value": "igwvpcBuddy"
-                    }
-                ]
+                "Tags":[{"Key": "Name", "Value": "igwBuddy"}]
             }
         },
         "igwattachmentvpcBuddy": 
@@ -116,7 +98,7 @@
             "Type": "AWS::EC2::VPCGatewayAttachment",
             "Properties": 
             {
-                "InternetgatewayId": 
+                "InternetGatewayId": 
                 {
                     "Ref": "igwvpcBuddy"
                 },
@@ -145,4 +127,4 @@
             }
         }
     }
-}
+}# dev 
